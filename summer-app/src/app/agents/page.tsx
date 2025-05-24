@@ -31,8 +31,14 @@ export default function Agents() {
     const fetchAgents = async () => {
       try {
         setLoading(true);
+        // Fetch spirit animal and joke for fun agent data
+        const spiritResponse = await fetch('https://sd-6310-2025-summer-express-app.onrender.com/api/spirit-animal');
+        const spiritData = await spiritResponse.json();
         
-        // Only use endpoints that exist - removed spirit-animal and joke calls
+        const jokeResponse = await fetch('https://sd-6310-2025-summer-express-app.onrender.com/api/joke');
+        const jokeData = await jokeResponse.json();
+        
+        // Enhanced mock agents with API data
         const mockAgents: Agent[] = [
           {
             id: 1,
@@ -96,12 +102,11 @@ export default function Agents() {
           }
         ];
         
-        // Simulate loading delay
         await new Promise(resolve => setTimeout(resolve, 800));
         setAgents(mockAgents);
       } catch (error) {
         console.error('Error fetching agents:', error);
-        // Set fallback data even on error
+        // Fallback to static data if API fails
         setAgents([
           {
             id: 1,
@@ -193,12 +198,12 @@ export default function Agents() {
             <div className="flex items-center space-x-4">
               <Image
                 src="/next.svg"
-                alt="LeadGen Pro"
+                alt="Surefire Seller Logo"
                 width={40}
                 height={40}
                 className="dark:invert"
               />
-              <h1 className="text-2xl font-bold text-gray-900 font-serif">LeadGen Pro</h1>
+              <h1 className="text-2xl font-bold text-gray-900 font-serif">SureFire Seller</h1>
             </div>
             <nav className="flex space-x-8">
               <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
