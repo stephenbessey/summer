@@ -186,7 +186,7 @@ export default function Home() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-blue-900 mb-2">Quote of the Day</h4>
-                      <p className="text-blue-800 text-sm italic">"{dailyInsight.quote}"</p>
+                      <p className="text-blue-800 text-sm italic">{`"${dailyInsight.quote}"`}</p>
                     </div>
                   </div>
                 </div>
@@ -243,7 +243,7 @@ export default function Home() {
             </div>
 
             <div className="mt-6 text-center">
-              <p className="text-gray-600 text-sm italic">{getMotivationalMessage()}</p>
+              <p className="text-gray-600 text-sm italic">{`"${getMotivationalMessage()}"`}</p>
             </div>
           </div>
         )}
