@@ -18,7 +18,29 @@ interface Agent {
   avatar: string;
   location: string;
   joinDate: string;
+  motivationalQuote?: string; // From API
+  favoriteColor?: string; // From API
+  officeSpirit?: string; // From API
 }
+
+// Define API response types
+interface QuoteResponse {
+  quote?: string;
+}
+
+interface FortuneResponse {
+  fortune?: string;
+}
+
+interface SpiritAnimalResponse {
+  spiritAnimal?: string;
+}
+
+interface ColorResponse {
+  color?: string;
+}
+
+type ApiResponse = QuoteResponse | FortuneResponse | SpiritAnimalResponse | ColorResponse;
 
 export default function Agents() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -31,15 +53,43 @@ export default function Agents() {
     const fetchAgents = async () => {
       try {
         setLoading(true);
-        // Fetch spirit animal and joke for fun agent data
-        const spiritResponse = await fetch('https://sd-6310-2025-summer-express-app.onrender.com/api/spirit-animal');
-        const spiritData = await spiritResponse.json();
         
-        const jokeResponse = await fetch('https://sd-6310-2025-summer-express-app.onrender.com/api/joke');
-        const jokeData = await jokeResponse.json();
-        
-        // Enhanced mock agents with API data
-        const mockAgents: Agent[] = [
+        // Fetch inspirational data from working API endpoints to enhance agent profiles
+        const apiEndpoints = [
+          'https://sd-6310-2025-summer-express-app.onrender.com/api/quote',
+          'https://sd-6310-2025-summer-express-app.onrender.com/api/spirit-animal',
+          'https://sd-6310-2025-summer-express-app.onrender.com/api/color',
+          'https://sd-6310-2025-summer-express-app.onrender.com/api/fortune-cookie'
+        ];
+
+        const apiPromises = apiEndpoints.map(async (url): Promise<ApiResponse | null> => {
+          try {
+            const response = await fetch(url, {
+              method: 'GET',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              cache: 'no-cache'
+            });
+            
+            if (response.ok) {
+              return await response.json() as ApiResponse;
+            }
+            return null;
+          } catch (error) {
+            console.warn(`Failed to fetch from ${url}:`, error);
+            return null;
+          }
+        });
+
+        const responses = await Promise.all(apiPromises);
+        const apiData: ApiResponse[] = responses.filter((data): data is ApiResponse => data !== null);
+
+        console.log('Successfully fetched API data:', apiData);
+
+        // Base agent data
+        const baseAgents: Omit<Agent, 'motivationalQuote' | 'favoriteColor' | 'officeSpirit'>[] = [
           {
             id: 1,
             name: "Jennifer Martinez",
@@ -101,29 +151,78 @@ export default function Agents() {
             joinDate: "2009-09-05"
           }
         ];
+
+        // Helper functions to safely extract data from API responses
+        const getQuoteFromApiData = (data: ApiResponse[]): string | undefined => {
+          for (const item of data) {
+            if ('quote' in item && item.quote) {
+              return item.quote;
+            }
+            if ('fortune' in item && item.fortune) {
+              return item.fortune;
+            }
+          }
+          return undefined;
+        };
+
+        const getColorFromApiData = (data: ApiResponse[]): string | undefined => {
+          const colorItem = data.find((item): item is ColorResponse => 'color' in item);
+          return colorItem?.color;
+        };
+
+        const getSpiritAnimalFromApiData = (data: ApiResponse[]): string | undefined => {
+          const spiritItem = data.find((item): item is SpiritAnimalResponse => 'spiritAnimal' in item);
+          return spiritItem?.spiritAnimal;
+        };
+
+        // Enhance agents with API data
+        const enhancedAgents: Agent[] = baseAgents.map((agent) => {
+          const enhancement: Partial<Pick<Agent, 'motivationalQuote' | 'favoriteColor' | 'officeSpirit'>> = {};
+
+          // Add motivational quote from API
+          const quote = getQuoteFromApiData(apiData);
+          if (quote) {
+            enhancement.motivationalQuote = quote;
+          }
+
+          // Add favorite color from API
+          const color = getColorFromApiData(apiData);
+          if (color) {
+            enhancement.favoriteColor = color;
+          }
+
+          // Add office spirit animal from API
+          const spiritAnimal = getSpiritAnimalFromApiData(apiData);
+          if (spiritAnimal) {
+            enhancement.officeSpirit = spiritAnimal;
+          }
+
+          return { ...agent, ...enhancement };
+        });
         
+        // Simulate loading delay
         await new Promise(resolve => setTimeout(resolve, 800));
-        setAgents(mockAgents);
+        setAgents(enhancedAgents);
+        
       } catch (error) {
         console.error('Error fetching agents:', error);
-        // Fallback to static data if API fails
-        setAgents([
-          {
-            id: 1,
-            name: "Jennifer Martinez",
-            email: "j.martinez@realty.com",
-            phone: "(555) 100-2000",
-            specialty: "Luxury Homes",
-            experience: 8,
-            rating: 4.9,
-            totalLeads: 145,
-            activeLeads: 23,
-            closedDeals: 89,
-            avatar: "/next.svg",
-            location: "Austin, TX",
-            joinDate: "2016-03-15"
-          }
-        ]);
+        // Fallback to basic agent data
+        const fallbackAgent: Agent = {
+          id: 1,
+          name: "Jennifer Martinez",
+          email: "j.martinez@realty.com",
+          phone: "(555) 100-2000",
+          specialty: "Luxury Homes",
+          experience: 8,
+          rating: 4.9,
+          totalLeads: 145,
+          activeLeads: 23,
+          closedDeals: 89,
+          avatar: "/next.svg",
+          location: "Austin, TX",
+          joinDate: "2016-03-15"
+        };
+        setAgents([fallbackAgent]);
       } finally {
         setLoading(false);
       }
@@ -160,7 +259,7 @@ export default function Agents() {
     });
 
   const renderStars = (rating: number) => {
-    const stars = [];
+    const stars: React.ReactElement[] = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
 
@@ -252,7 +351,7 @@ export default function Agents() {
               <select
                 id="sort"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="rating">Rating</option>
@@ -345,9 +444,18 @@ export default function Agents() {
                       className="rounded-full dark:invert"
                     />
                   </div>
-                  <div className="ml-4">
+                  <div className="ml-4 flex-1">
                     <h3 className="text-lg font-semibold text-gray-900">{agent.name}</h3>
                     <p className="text-sm text-gray-600">{agent.specialty}</p>
+                    {agent.favoriteColor && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <div 
+                          className="w-3 h-3 rounded-full border border-gray-300"
+                          style={{ backgroundColor: agent.favoriteColor }}
+                        ></div>
+                        <span className="text-xs text-gray-500">Favorite color</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -360,7 +468,21 @@ export default function Agents() {
                   </div>
                   <p className="text-sm text-gray-600">{agent.experience} years experience</p>
                   <p className="text-sm text-gray-600">{agent.location}</p>
+                  {agent.officeSpirit && (
+                    <p className="text-sm text-gray-600">Office spirit: {agent.officeSpirit}</p>
+                  )}
                 </div>
+
+                {/* Motivational Quote from API */}
+                {agent.motivationalQuote && (
+                  <div className="mb-4 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                    <p className="text-sm italic text-blue-800">
+                      "{agent.motivationalQuote.length > 80 
+                        ? agent.motivationalQuote.substring(0, 80) + '...' 
+                        : agent.motivationalQuote}"
+                    </p>
+                  </div>
+                )}
 
                 <div className="grid grid-cols-3 gap-4 mb-4 text-center">
                   <div>
