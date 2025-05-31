@@ -19,3 +19,7 @@ body {
   background: var(--background);
   font-family: Arial, sans-serif;
 }
+
+.font-playfair {
+  font-family: var(--font-playfair), serif;
+}
