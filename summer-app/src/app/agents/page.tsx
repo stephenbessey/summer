@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 import { Agent } from '../../types';
 import { AgentCard } from '../../components/AgentCard';
 import { SearchSort } from '../../components/SearchSort';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { KeyMetric } from '../../components/ui/KeyMetric';
+import { LoadingSpinner } from '../../components/ui/LoadingSpinner';
 import { useApi } from '../../hooks/useApi';
 
 export default function Agents() {
@@ -51,26 +54,28 @@ export default function Agents() {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-2 text-gray-600">Loading agents...</p>
-          </div>
+          <LoadingSpinner message="Loading agents..." />
         </div>
       </div>
     );
   }
 
+  const teamStats = [
+    { label: 'Total Agents', value: agents.length, color: 'blue' as const },
+    { label: 'Total Leads', value: agents.reduce((sum, a) => sum + a.leads, 0), color: 'green' as const },
+    { label: 'Total Deals', value: agents.reduce((sum, a) => sum + a.deals, 0), color: 'purple' as const },
+    { label: 'Avg Rating', value: agents.length > 0 ? (agents.reduce((sum, a) => sum + a.rating, 0) / agents.length).toFixed(1) : '0.0', color: 'yellow' as const }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
         
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Real Estate Agents</h1>
-          <p className="text-gray-600">Manage your team and track performance</p>
-        </div>
+        <PageHeader 
+          title="Real Estate Agents" 
+          description="Manage your team and track performance" 
+        />
 
-        {/* Search and Sort */}
         <SearchSort
           search={search}
           onSearchChange={setSearch}
@@ -78,26 +83,16 @@ export default function Agents() {
           onSortChange={setSortBy}
         />
 
-        {/* Stats */}
+        {/* Team Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-sm p-4 text-center">
-            <p className="text-2xl font-bold text-blue-600">{agents.length}</p>
-            <p className="text-sm text-gray-600">Total Agents</p>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-4 text-center">
-            <p className="text-2xl font-bold text-green-600">{agents.reduce((sum, a) => sum + a.leads, 0)}</p>
-            <p className="text-sm text-gray-600">Total Leads</p>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-4 text-center">
-            <p className="text-2xl font-bold text-purple-600">{agents.reduce((sum, a) => sum + a.deals, 0)}</p>
-            <p className="text-sm text-gray-600">Total Deals</p>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm p-4 text-center">
-            <p className="text-2xl font-bold text-yellow-600">
-              {agents.length > 0 ? (agents.reduce((sum, a) => sum + a.rating, 0) / agents.length).toFixed(1) : '0.0'}
-            </p>
-            <p className="text-sm text-gray-600">Avg Rating</p>
-          </div>
+          {teamStats.map((stat, index) => (
+            <KeyMetric
+              key={index}
+              label={stat.label}
+              value={stat.value}
+              color={stat.color}
+            />
+          ))}
         </div>
 
         {/* Agents Grid */}
@@ -109,7 +104,7 @@ export default function Agents() {
 
         {filteredAndSorted.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500">No agents found.</p>
+            <p className="text-gray-800">No agents found.</p>
           </div>
         )}
       </div>
