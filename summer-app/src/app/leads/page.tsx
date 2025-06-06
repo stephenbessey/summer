@@ -62,7 +62,7 @@ export default function Leads() {
   const [loadedOnce, setLoadedOnce] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const BASE_URL = 'https://sd-6310-2025-summer-express-app.onrender.com';
+  const BASE_URL = 'https://sd-6310-2025-summer-express-app.onrender.com/api';
 
   const fetchLeads = async () => {
     try {

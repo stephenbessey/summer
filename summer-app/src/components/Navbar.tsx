@@ -32,11 +32,12 @@ export default function Navbar() {
             className="flex items-center space-x-3 font-playfair text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
           >
             <Image
-              src="/next.svg"
+              src="/fire.png"
               alt="SureFire Seller Logo"
               width={32}
               height={32}
-              className="dark:invert"
+              style={{ width: 'auto', height: 'auto' }}
+              className="object-contain"
             />
             SureFire Seller
           </Link>
