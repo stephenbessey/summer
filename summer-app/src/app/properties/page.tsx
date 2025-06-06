@@ -286,40 +286,6 @@ export default function Properties() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <Image
-                src="/next.svg"
-                alt="SureFire Seller Logo"
-                width={40}
-                height={40}
-                className="dark:invert"
-              />
-              <h1 className="text-2xl font-bold text-gray-900 font-serif">SureFire Seller</h1>
-            </div>
-            <nav className="flex space-x-8">
-                <Link href="/" className="text-gray-600 hover:text-gray-900 transition-colors">
-                    Dashboard
-                </Link>
-                <Link href="/agents" className="text-gray-600 hover:text-gray-900 transition-colors">
-                    Agents
-                </Link>
-                <Link href="/leads" className="text-gray-600 hover:text-gray-900 transition-colors">
-                    Leads
-                </Link>
-                <Link href="/properties" className="text-gray-600 hover:text-gray-900 transition-colors">
-                    Properties
-                </Link>
-                <Link href="/analytics" className="text-gray-600 hover:text-gray-900 transition-colors">
-                    Analytics
-                </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

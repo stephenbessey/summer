@@ -13,7 +13,7 @@ export default function Home() {
     {
       href: '/agents',
       title: 'Manage Agents',
-      description: 'View and manage your team',
+      description: 'View and manage your real estate team',
       color: 'blue',
       icon: (
         <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -22,25 +22,36 @@ export default function Home() {
       )
     },
     {
-      href: '/analytics',
-      title: 'Analytics',
-      description: 'Track performance',
+      href: '/leads',
+      title: 'Lead Management',
+      description: 'Track and manage your leads',
       color: 'green',
       icon: (
         <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
       )
     },
     {
-      href: '#',
-      title: 'Settings',
-      description: 'Configure workspace',
+      href: '/properties',
+      title: 'Property Listings',
+      description: 'Manage property inventory',
       color: 'purple',
       icon: (
         <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2" />
+        </svg>
+      )
+    },
+    {
+      href: '/analytics',
+      title: 'Analytics & Reports',
+      description: 'Track performance metrics',
+      color: 'yellow',
+      icon: (
+        <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
         </svg>
       )
     }
@@ -62,7 +73,7 @@ export default function Home() {
             Welcome to <span className="text-blue-600 font-playfair">SureFire Seller</span>
           </h1>
           <p className="text-xl text-gray-800 mb-6">
-            Your simple real estate CRM solution
+            Your comprehensive real estate CRM solution
           </p>
           
           <StatusIndicator connected={connected} />
@@ -101,20 +112,56 @@ export default function Home() {
         )}
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {quickActions.map((action, index) => (
-            <Link key={index} href={action.href} className="group">
-              <Card className="hover:shadow-md transition-shadow">
-                <div className="text-center">
-                  <div className={`w-12 h-12 bg-${action.color}-100 rounded-lg mx-auto mb-4 flex items-center justify-center`}>
-                    {action.icon}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Quick Actions</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {quickActions.map((action, index) => (
+              <Link key={index} href={action.href} className="group">
+                <Card className="hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+                  <div className="text-center">
+                    <div className={`w-12 h-12 bg-${action.color}-100 rounded-lg mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                      {action.icon}
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2 text-gray-900 group-hover:text-blue-600 transition-colors">{action.title}</h3>
+                    <p className="text-gray-600 text-sm">{action.description}</p>
                   </div>
-                  <h3 className="text-lg font-semibold mb-2 text-gray-900">{action.title}</h3>
-                  <p className="text-gray-800 text-sm">{action.description}</p>
-                </div>
-              </Card>
-            </Link>
-          ))}
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <Card className="text-center">
+            <div className="p-2 bg-blue-100 rounded-lg w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-blue-600 mb-1">4</h3>
+            <p className="text-gray-600">Active Agents</p>
+          </Card>
+
+          <Card className="text-center">
+            <div className="p-2 bg-green-100 rounded-lg w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-green-600 mb-1">533+</h3>
+            <p className="text-gray-600">Total Leads</p>
+          </Card>
+
+          <Card className="text-center">
+            <div className="p-2 bg-purple-100 rounded-lg w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-purple-600 mb-1">Load</h3>
+            <p className="text-gray-600">Properties Available</p>
+          </Card>
         </div>
 
         {loading && <LoadingSpinner />}
