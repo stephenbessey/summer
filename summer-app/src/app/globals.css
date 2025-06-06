@@ -26,9 +26,9 @@ body {
 }
 
 .text-readable {
-  @apply text-gray-700;
+  @apply text-gray-800;
 }
 
 .text-readable-light {
-  @apply text-gray-600;
+  @apply text-gray-700;
 }
